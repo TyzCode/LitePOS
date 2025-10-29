@@ -1,0 +1,10 @@
+body {
+  font-family: Inter, system-ui, Arial;
+  margin:0;
+  background:#f7f7f8;
+  color:#111;
+  overflow: hidden;
+}
+input, button {
+  font-family: inherit;
+}
