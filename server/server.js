@@ -3,7 +3,10 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import productRoutes from './routes/productRoutes.js';
+import salesRoutes from './routes/salesRoutes.js';
+import ordersRoutes from './routes/ordersRoutes.js';
 import userRoutes from './routes/userRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 
 dotenv.config();
 
@@ -18,7 +21,10 @@ app.use(express.json());
 
 // Routes
 app.use('/api/Inventory', productRoutes);
+app.use('/api/Sales', salesRoutes);
+app.use('/api/Orders', ordersRoutes);
 app.use('/api/Users', userRoutes);
+app.use('/api/auth', authRoutes);
 
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('Connected to existing MongoDB database'))

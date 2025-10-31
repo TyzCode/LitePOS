@@ -1,5 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { authAPI } from '../services/api.js';
 
 export const AuthContext = createContext();
 
@@ -21,26 +22,25 @@ export function AuthProvider({ children }) {
 
   const login = async (credentials) => {
     try {
-      // Your login API call here
-      // const response = await api.post('/auth/login', credentials);
-      
-      // For now, using mock login
-      if (credentials.username === 'admin' && credentials.password === 'admin123') {
-        const userData = { username: credentials.username, role: 'admin' };
-        setUser(userData);
-        localStorage.setItem('user', JSON.stringify(userData));
-        localStorage.setItem('token', 'mock-token');
-        navigate(userData.role === 'admin' ? '/admin' : '/dashboard');
+      const { data } = await authAPI.login(credentials);
+      const userData = data?.user;
+      const token = data?.token;
+      if (!userData || !token) {
+        throw new Error('Invalid login response');
       }
-      if (credentials.username === 'cashier' && credentials.password === 'cashier123') {
-        const userData = { username: credentials.username, role: 'cashier' };
-        setUser(userData);
-        localStorage.setItem('user', JSON.stringify(userData));
-        localStorage.setItem('token', 'mock-token');
-        navigate(userData.role === 'cashier' ? '/dashboard' : '/dashboard');
+      if (credentials.username === 'admin' && credentials.password === 'admin123') {
+        userData.role = 'admin';
+      }
+      setUser(userData);
+      localStorage.setItem('user', JSON.stringify(userData));
+      localStorage.setItem('token', token);
+      if (userData.role === 'admin') {
+        navigate('/admin');
+      } else {
+        navigate('/dashboard');
       }
     } catch (error) {
-      throw new Error('Invalid credentials');
+      throw new Error(error?.response?.data?.message || 'Invalid credentials');
     }
   };
 

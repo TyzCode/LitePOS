@@ -1,5 +1,6 @@
 import express from 'express';
 import mongoose from 'mongoose';
+import { Int32 } from 'mongodb';
 
 const router = express.Router();
 
@@ -19,8 +20,13 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
   try {
     const db = mongoose.connection.db;
+    const payload = { ...req.body };
+    if (payload.quantity !== undefined) {
+      const q = parseInt(payload.quantity, 10);
+      payload.quantity = new Int32(Number.isNaN(q) ? 0 : q);
+    }
     const newProduct = {
-      ...req.body,
+      ...payload,
       createdAt: new Date()
     };
 
@@ -38,17 +44,23 @@ router.put('/:id', async (req, res) => {
     const db = mongoose.connection.db;
     const id = req.params.id;
 
-    const result = await db.collection('Inventory').findOneAndUpdate(
-      { _id: new mongoose.Types.ObjectId(id) },
-      { $set: req.body },
-      { returnDocument: 'after' }
-    );
+    const isValid = mongoose.Types.ObjectId.isValid(id);
+    const filter = isValid
+      ? { $or: [{ _id: new mongoose.Types.ObjectId(id) }, { _id: id }] }
+      : { _id: id };
 
-    if (!result.value) {
+    const updatePayload = { ...req.body };
+    if (updatePayload.quantity !== undefined) {
+      const q = parseInt(updatePayload.quantity, 10);
+      updatePayload.quantity = new Int32(Number.isNaN(q) ? 0 : q);
+    }
+    const upd = await db.collection('Inventory').updateOne(filter, { $set: updatePayload });
+    if (!upd.matchedCount) {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    res.json(result.value);
+    const doc = await db.collection('Inventory').findOne(filter);
+    res.json(doc);
   } catch (error) {
     console.error('Error updating product:', error);
     res.status(400).json({ message: error.message });
@@ -72,6 +84,27 @@ router.delete('/:id', async (req, res) => {
     res.json({ message: 'Product deleted successfully', id });
   } catch (error) {
     console.error('Error deleting product:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// Get statistics for dashboard
+router.get('/stats', async (req, res) => {
+  try {
+    const db = mongoose.connection.db;
+    const totalItems = await db.collection('Inventory').countDocuments();
+
+    const salesAgg = await db.collection('Sales').aggregate([
+      { $match: { status: 'successful' } },
+      { $group: { _id: null, sum: { $sum: { $toDouble: '$amount' } }, count: { $sum: 1 } } }
+    ]).toArray();
+    const totalSales = salesAgg.length > 0 ? salesAgg[0].sum : 0;
+
+    const completedOrders = await db.collection('Orders').countDocuments({ status: 'completed' });
+
+    res.json({ totalItems, totalSales, completedOrders });
+  } catch (error) {
+    console.error('Error fetching statistics:', error);
     res.status(500).json({ message: error.message });
   }
 });

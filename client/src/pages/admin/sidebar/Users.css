@@ -1,0 +1,122 @@
+.users-page {
+  padding: 20px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.users-page main {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.users-header h1 {
+  margin: 0 0 4px 0;
+}
+
+.users-header__info {
+  color: #666;
+  font-size: 14px;
+}
+
+.user-form {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.user-form__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 160px 140px;
+  gap: 12px;
+}
+
+.user-form input,
+.user-form select {
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+}
+
+.submit-btn {
+  background: #111827;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 12px;
+  cursor: pointer;
+}
+
+/* Generic button styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  font-size: 14px;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+}
+
+.btn-primary {
+  background-color: #111827;
+  color: #ffffff;
+}
+.btn-primary:hover { opacity: 0.9; }
+
+.btn-secondary {
+  background-color: #f3f4f6;
+  color: #111827;
+  border-color: #e5e7eb;
+}
+.btn-secondary:hover { background-color: #e5e7eb; }
+
+.btn-danger {
+  background-color: #dc2626;
+  color: #ffffff;
+}
+.btn-danger:hover { opacity: 0.9; }
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.users-list {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.users-list table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed; 
+}
+
+.users-list th,
+.users-list td {
+  text-align: left;
+  padding: 10px 8px;
+  border-bottom: 1px solid #f3f4f6;
+  width: 24%;
+  word-break: break-word;
+}
+
+.error {
+  color: #b91c1c;
+  background: #fee2e2;
+  border: 1px solid #fecaca;
+  padding: 8px 10px;
+  border-radius: 6px;
+  margin: 8px 0 12px 0;
+}
+
