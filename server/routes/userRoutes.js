@@ -9,7 +9,7 @@ router.get('/', async (req, res) => {
   try {
     const db = mongoose.connection.db;
     const users = await db.collection('Users')
-      .find({}, { projection: { password: 0 } })
+      .find({}) //, { projection: { password: 0 } }
       .toArray();
     res.json(users);
   } catch (error) {
@@ -70,7 +70,7 @@ router.put('/:id', async (req, res) => {
       { returnDocument: 'after', projection: { password: 0 } }
     );
 
-    if (!result.value) {
+    if (!result) {
       return res.status(404).json({ message: 'User not found' });
     }
 

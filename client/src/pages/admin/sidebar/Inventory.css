@@ -1,6 +1,9 @@
-.admin-dashboard {
+.inventory-page {
   padding: 20px;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
 header {
@@ -12,9 +15,8 @@ header {
 
 .user-info {
   color: #666;
-  margin-top: 5px;
+  font-size: 14px;
 }
-
 
 .product-form {
   background: white;
@@ -131,5 +133,10 @@ header {
 
 .status-out {
   color: #ef4444;
+  font-weight: 700;
+}
+
+.status-in {
+  color: #10b981;
   font-weight: 700;
 }

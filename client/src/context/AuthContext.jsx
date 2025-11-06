@@ -10,7 +10,6 @@ export function AuthProvider({ children }) {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Check for stored auth token
     const token = localStorage.getItem('token');
     const storedUser = localStorage.getItem('user');
 
@@ -27,9 +26,6 @@ export function AuthProvider({ children }) {
       const token = data?.token;
       if (!userData || !token) {
         throw new Error('Invalid login response');
-      }
-      if (credentials.username === 'admin' && credentials.password === 'admin123') {
-        userData.role = 'admin';
       }
       setUser(userData);
       localStorage.setItem('user', JSON.stringify(userData));

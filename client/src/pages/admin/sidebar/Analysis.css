@@ -1,0 +1,174 @@
+.analytics-page {
+    padding: 20px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.analytics-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.analytics-header h1 {
+    margin: 0 0 4px 0;
+    font-size: 28px;
+    color: #1f2937;
+}
+
+.analytics-header__info {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+.analytics-cards {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.card {
+    background: #fff;
+    padding: 14px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    flex: 1;
+}
+
+.card h3 {
+    margin: 0 0 8px 0;
+    font-size: 14px;
+    color: #374151;
+}
+
+.card .large {
+    font-size: 20px;
+    font-weight: 600;
+    color: #111827;
+}
+
+.card.clickable {
+    cursor: pointer;
+    position: relative
+}
+
+.card.clickable:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08)
+}
+
+.card-hint {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 6px
+}
+
+.completed-orders {
+    margin-top: 18px;
+}
+
+.completed-orders .top-table td,
+.completed-orders .top-table th {
+    vertical-align: top;
+}
+
+.analytics-charts {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.chart-panel {
+    background: #fff;
+    padding: 12px;
+    border-radius: 8px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+
+.chart-panel h2 {
+    margin: 0 0 10px 0;
+    font-size: 16px;
+}
+
+.bar-chart {
+    width: 100%;
+    height: 140px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.line-chart {
+    width: 100%;
+    height: 180px;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.chart-empty {
+    padding: 28px;
+    color: #6b7280;
+    text-align: center;
+}
+
+.top-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.top-table th,
+.top-table td {
+    padding: 8px 6px;
+    text-align: left;
+    border-top: 1px solid #f3f4f6;
+}
+
+.month-legend {
+    display: flex;
+    gap: 8px;
+    margin-top: 6px;
+    flex-wrap: wrap;
+    color: #6b7280;
+}
+
+.legend-item {
+    background: #f9fafb;
+    padding: 6px 8px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.period-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.period-toggle button {
+  padding: 6px 18px;
+  border: 1px solid #e5e7eb;
+  background: #f9fafb;
+  color: #374151;
+  border-radius: 6px;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+
+.period-toggle button.active {
+  background: #212731;
+  color: #fff;
+  border: none;
+}
+
+@media (max-width:900px) {
+    .analytics-charts {
+        grid-template-columns: 1fr
+    }
+
+    .analytics-cards {
+        flex-direction: column
+    }
+}

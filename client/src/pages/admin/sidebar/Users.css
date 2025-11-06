@@ -14,6 +14,8 @@
 
 .users-header h1 {
   margin: 0 0 4px 0;
+  color: #1f2937;
+  font-size: 28px;
 }
 
 .users-header__info {
@@ -68,20 +70,29 @@
   background-color: #111827;
   color: #ffffff;
 }
-.btn-primary:hover { opacity: 0.9; }
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
 
 .btn-secondary {
   background-color: #f3f4f6;
   color: #111827;
   border-color: #e5e7eb;
 }
-.btn-secondary:hover { background-color: #e5e7eb; }
+
+.btn-secondary:hover {
+  background-color: #e5e7eb;
+}
 
 .btn-danger {
   background-color: #dc2626;
   color: #ffffff;
 }
-.btn-danger:hover { opacity: 0.9; }
+
+.btn-danger:hover {
+  opacity: 0.9;
+}
 
 .action-buttons {
   display: flex;
@@ -99,7 +110,7 @@
 .users-list table {
   width: 100%;
   border-collapse: collapse;
-  table-layout: fixed; 
+  table-layout: fixed;
 }
 
 .users-list th,
@@ -119,4 +130,3 @@
   border-radius: 6px;
   margin: 8px 0 12px 0;
 }
-

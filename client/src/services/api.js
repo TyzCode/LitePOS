@@ -33,7 +33,9 @@ export const salesAPI = {
 };
 
 export const ordersAPI = {
-  record: (payload) => API.post('/Orders', payload)
+  record: (payload) => API.post('/Orders', payload),
+  getAll: (params) => API.get('/Orders', { params }),
+  getCompleted: () => API.get('/Orders', { params: { status: 'completed' } })
 };
 
 export default API;
