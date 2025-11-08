@@ -21,6 +21,11 @@ export default function AdminDashboard() {
         category: '',
         image: null
     });
+    const [sortConfig, setSortConfig] = useState({
+        direction: 'normal',
+        active: false
+    });
+    const [originalProducts, setOriginalProducts] = useState([]);
 
     useEffect(() => {
         loadProducts();
@@ -51,8 +56,10 @@ export default function AdminDashboard() {
         try {
             const response = await productAPI.getAll();
             setProducts(response.data);
+            setOriginalProducts(response.data);
             setLoading(false);
             setError('');
+            setSortConfig({ direction: 'normal', active: false });
         } catch (err) {
             setError('Failed to load products');
             setLoading(false);
@@ -130,6 +137,42 @@ export default function AdminDashboard() {
         } catch (err) {
             setError('Failed to delete product');
         }
+    };
+
+    const handleSort = () => {
+        let newDirection;
+        let newProducts;
+        
+        // Cycle through: normal - asc - desc
+        switch (sortConfig.direction) {
+            case 'normal':
+                newDirection = 'asc';
+                newProducts = [...products].sort((a, b) => {
+                    const quantityA = Number(a.quantity) || 0;
+                    const quantityB = Number(b.quantity) || 0;
+                    return quantityA - quantityB;
+                });
+                break;
+            case 'asc':
+                newDirection = 'desc';
+                newProducts = [...products].sort((a, b) => {
+                    const quantityA = Number(a.quantity) || 0;
+                    const quantityB = Number(b.quantity) || 0;
+                    return quantityB - quantityA;
+                });
+                break;
+            case 'desc':
+            default:
+                newDirection = 'normal';
+                newProducts = [...originalProducts];
+                break;
+        }
+        
+        setProducts(newProducts);
+        setSortConfig({
+            direction: newDirection,
+            active: newDirection !== 'normal'
+        });
     };
 
     if (loading) return <div>Loading...</div>;
@@ -212,7 +255,9 @@ export default function AdminDashboard() {
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th>Price</th>
-                                <th>Quantity</th>
+                                <th onClick={handleSort} style={{cursor: 'pointer'}}>
+                                    Quantity {sortConfig.direction === 'asc' ? ' ↑' : sortConfig.direction === 'desc' ? ' ↓' : sortConfig.direction === 'normal' ? ' ↑↓' : ''}
+                                </th>
                                 <th>Status</th>
                                 <th>Category</th>
                                 <th>Actions</th>

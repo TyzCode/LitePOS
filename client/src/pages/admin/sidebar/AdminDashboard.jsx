@@ -42,12 +42,12 @@ const AdminDashboard = () => {
 
       <div className="dashboard-cards">
         <div className="dashboard-card">
-          <h3>Total Items</h3>
-          <p>{stats.totalItems}</p>
-        </div>
-        <div className="dashboard-card">
           <h3>Total Sales</h3>
           <p>₱{Number(stats.totalSales || 0).toFixed(2)}</p>
+        </div>
+        <div className="dashboard-card">
+          <h3>Total Items</h3>
+          <p>{stats.totalItems}</p>
         </div>
         <div className="dashboard-card">
           <h3>Completed Orders</h3>

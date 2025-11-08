@@ -29,7 +29,9 @@ export const authAPI = {
 };
 
 export const salesAPI = {
-  record: (payload) => API.post('/Sales', payload)
+  record: (payload) => API.post('/Sales', payload),
+  getAll: (params) => API.get('/Sales', { params }),
+  getCompleted: () => API.get('/Sales', { params: { status: 'successful' } })
 };
 
 export const ordersAPI = {

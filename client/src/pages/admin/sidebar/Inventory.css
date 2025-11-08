@@ -100,6 +100,21 @@ header {
   cursor: pointer;
 }
 
+table th[onclick] {
+  user-select: none;
+  transition: background-color 0.2s;
+  position: relative;
+}
+
+table th[onclick]:hover {
+  background: #edf0f3;
+}
+
+table th[onclick]::after {
+  margin-left: 5px;
+  display: inline-block;
+}
+
 .submit-btn:hover {
   background: #218838;
 }
