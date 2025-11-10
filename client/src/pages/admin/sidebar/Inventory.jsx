@@ -84,16 +84,6 @@ export default function AdminDashboard() {
 
     const categories = Array.from(new Set((products || []).map(p => p.category).filter(Boolean))).sort();
 
-    const handleUpdate = async (id, data) => {
-        try {
-            await productAPI.update(id, data);
-            loadProducts();
-            setError('');
-        } catch (err) {
-            setError('Failed to update product');
-        }
-    };
-
     const startEdit = (p) => {
         setEditingProductId(p._id);
         setEditProduct({

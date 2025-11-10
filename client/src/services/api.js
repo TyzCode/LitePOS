@@ -30,6 +30,7 @@ export const authAPI = {
 
 export const salesAPI = {
   record: (payload) => API.post('/Sales', payload),
+  delete: (id) => API.delete(`/Sales/${id}`),
   getAll: (params) => API.get('/Sales', { params }),
   getCompleted: () => API.get('/Sales', { params: { status: 'successful' } }),
   getStats: (days) => API.get(`/Sales/stats/${days}`)

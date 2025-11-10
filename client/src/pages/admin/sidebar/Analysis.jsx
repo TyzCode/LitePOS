@@ -4,6 +4,7 @@ import { productAPI, ordersAPI, salesAPI } from '../../../services/api.js';
 import './Analysis.css';
 import SalesChart from '../../../components/SalesChart.jsx';
 import RevenueGrowth from '../../../components/RevenueGrowth.jsx';
+import PredictionList from '../../../components/PredictionList.jsx';
 
 const Analysis = () => {
     const { user } = useContext(AuthContext);
@@ -154,6 +155,9 @@ const Analysis = () => {
                         <h3>Completed Orders</h3>
                         <p className="large">{(stats && stats.completedOrders) ?? 0}</p>
                         <div className="card-hint">Click to view</div>
+                    </div>
+                    <div className="card">
+                        <PredictionList />
                     </div>
                 </section>
 

@@ -39,7 +39,7 @@ const AdminDashboard = () => {
     loadInventory();
     loadProducts();
     loadData();
-  }, []);
+  }, [products]);
 
   const loadData = async () => {
     setLoading(true);
