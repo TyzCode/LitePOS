@@ -13,6 +13,9 @@ export default function AdminDashboard() {
     const [isNewCategory, setIsNewCategory] = useState(false);
     const [newCategory, setNewCategory] = useState('');
     const [preview, setPreview] = useState(null);
+    const [lowStockThreshold, setLowStockThreshold] = useState(10);
+    const [showThresholdControl, setShowThresholdControl] = useState(false);
+    const [searchItem, setSearchItem] = useState('');
     const [formData, setFormData] = useState({
         name: '',
         description: '',
@@ -142,7 +145,7 @@ export default function AdminDashboard() {
     const handleSort = () => {
         let newDirection;
         let newProducts;
-        
+
         // Cycle through: normal - asc - desc
         switch (sortConfig.direction) {
             case 'normal':
@@ -167,13 +170,23 @@ export default function AdminDashboard() {
                 newProducts = [...originalProducts];
                 break;
         }
-        
+
         setProducts(newProducts);
         setSortConfig({
             direction: newDirection,
             active: newDirection !== 'normal'
         });
     };
+
+    const filteredProducts = products.filter(product => {
+        const lowerCaseSearch = searchItem.toLowerCase();
+
+        const matchesName = product.name?.toLowerCase().includes(lowerCaseSearch);
+        const matchesDescription = product.description?.toLowerCase().includes(lowerCaseSearch);
+        const matchesCategory = product.category?.toLowerCase().includes(lowerCaseSearch);
+
+        return matchesName || matchesDescription || matchesCategory;
+    });
 
     if (loading) return <div>Loading...</div>;
 
@@ -248,14 +261,53 @@ export default function AdminDashboard() {
                 </section>
 
                 <section className="products-list">
-                    <h2>Products Inventory</h2>
+                    <div className='product-inv'>
+                        <h2>Products Inventory</h2>
+                        <div className='product-inv-left'>
+                            <div>
+                                {!showThresholdControl && (
+                                    <input
+                                        type="text"
+                                        placeholder="Search by name, description, or category..."
+                                        value={searchItem}
+                                        onChange={(e) => setSearchItem(e.target.value)}
+                                        className="search-input-field"
+                                    />
+                                )}
+                                <button
+                                    className="settings-icon-btn"
+                                    onClick={() => setShowThresholdControl(!showThresholdControl)}
+                                    aria-expanded={showThresholdControl}
+                                    aria-controls="threshold-control-area"
+                                >
+                                    ⚙️
+                                </button>
+                            </div>
+                            {showThresholdControl && (
+                                <div id="threshold-control-area" className="threshold-control-input">
+                                    <label htmlFor="threshold-input">Low Stock Threshold:</label>
+                                    <input
+                                        id="threshold-input"
+                                        type="number"
+                                        min="0"
+                                        value={lowStockThreshold}
+                                        onChange={(e) => {
+                                            const newValue = Math.max(0, parseInt(e.target.value) || 0);
+                                            setLowStockThreshold(newValue);
+                                        }}
+                                    />
+                                </div>
+                            )}
+                        </div>
+
+                    </div>
                     <table>
                         <thead>
                             <tr>
                                 <th>Name</th>
                                 <th>Description</th>
                                 <th>Price</th>
-                                <th onClick={handleSort} style={{cursor: 'pointer'}}>
+                                <th onClick={handleSort} style={{ cursor: 'pointer' }}>
                                     Quantity {sortConfig.direction === 'asc' ? ' ↑' : sortConfig.direction === 'desc' ? ' ↓' : sortConfig.direction === 'normal' ? ' ↑↓' : ''}
                                 </th>
                                 <th>Status</th>
@@ -264,7 +316,7 @@ export default function AdminDashboard() {
                             </tr>
                         </thead>
                         <tbody>
-                            {products.map(product => (
+                            {products.map && filteredProducts.map(product => (
                                 <tr key={product._id}>
                                     <td>
                                         {editingProductId === product._id ? (
@@ -313,9 +365,16 @@ export default function AdminDashboard() {
                                         )}
                                     </td>
                                     <td>
-                                        {Number(product.quantity || 0) <= 0 ? (
-                                            <span className="status-out">Out of stock</span>
-                                        ) : <span className="status-in">In Stock</span>}
+                                        {(() => {
+                                            const quantity = Number(product.quantity || 0);
+                                            if (quantity <= 0) {
+                                                return <span className="status-out">Out of stock</span>;
+                                            }
+                                            if (quantity <= lowStockThreshold) {
+                                                return <span className="status-low">Low Stock</span>;
+                                            }
+                                            return <span className="status-in">In Stock</span>;
+                                        })()}
                                     </td>
                                     <td>
                                         {editingProductId === product._id ? (

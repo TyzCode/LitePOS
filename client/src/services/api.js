@@ -31,13 +31,18 @@ export const authAPI = {
 export const salesAPI = {
   record: (payload) => API.post('/Sales', payload),
   getAll: (params) => API.get('/Sales', { params }),
-  getCompleted: () => API.get('/Sales', { params: { status: 'successful' } })
+  getCompleted: () => API.get('/Sales', { params: { status: 'successful' } }),
+  getStats: (days) => API.get(`/Sales/stats/${days}`)
 };
 
 export const ordersAPI = {
   record: (payload) => API.post('/Orders', payload),
   getAll: (params) => API.get('/Orders', { params }),
   getCompleted: () => API.get('/Orders', { params: { status: 'completed' } })
+};
+
+export const predictionAPI = {
+  getPredictions: (period) => API.get('/predict', { params: { period } })
 };
 
 export default API;

@@ -1,0 +1,16 @@
+.revenue-container {
+  margin: "auto";
+  text-align: "center";
+  border-radius: 16px;
+  
+}
+
+.revenue-chart {
+  flex: 1 1 45%;
+  padding: 16px;
+}
+
+.revenue-chart {
+  background: #f9fafb;
+  border-radius: 12px;
+}

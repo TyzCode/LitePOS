@@ -2,6 +2,8 @@ import React, { useContext, useEffect, useState } from 'react';
 import AuthContext from '../../../context/AuthContext.jsx';
 import { productAPI, ordersAPI, salesAPI } from '../../../services/api.js';
 import './Analysis.css';
+import SalesChart from '../../../components/SalesChart.jsx';
+import RevenueGrowth from '../../../components/RevenueGrowth.jsx';
 
 const Analysis = () => {
     const { user } = useContext(AuthContext);
@@ -14,7 +16,8 @@ const Analysis = () => {
     const [ordersLoading, setOrdersLoading] = useState(false);
     const [ordersError, setOrdersError] = useState('');
     const [salesData, setSalesData] = useState([]);
-    
+    const [range, setRange] = useState("7d");
+
     useEffect(() => {
         loadData();
     }, []);
@@ -97,13 +100,11 @@ const Analysis = () => {
         );
     };
 
-    // Aggregate salesData into product totals (ignore dates — sum across all sales)
     const getTopSales = () => {
         if (!salesData || salesData.length === 0 || !products) return [];
 
         const totals = {};
         (salesData || []).forEach(sale => {
-            // consider only successful/completed sales
             const statusOk = !sale.status || sale.status === 'successful' || sale.status === 'completed';
             if (!statusOk) return;
 
@@ -130,45 +131,29 @@ const Analysis = () => {
             <main>
                 <section className="analytics-cards">
                     <div className="card">
-                        <h3>Sales Made</h3>
-                        <p className="large">₱{Number(stats && stats.totalSales).toFixed(2) ?? 0}</p>
+                        <h2>Sales Made</h2>
+                        <SalesChart range={range} setRange={setRange} />
                     </div>
                     <div className="card">
-                        <h3>Total Items</h3>
-                        <p className="large">{(stats && stats.totalItems) ?? products.length}</p>
+                        <RevenueGrowth range={range}/>
                     </div>
-                    <div className="card clickable" onClick={toggleShowOrders} role="button" tabIndex={0} onKeyDown={(e)=>{ if(e.key === 'Enter' || e.key === ' ') toggleShowOrders(); }}>
-                        <h3>Completed Orders</h3>
-                        <p className="large">{(stats && stats.completedOrders) ?? 0}</p>
-                        <div className="card-hint">Click to view</div>
-                    </div>
+                    <table className='chart-panel'>
+                        <thead>
+                            <h2>🏆 Top Selling Products</h2>
+                        </thead>
+                        <tbody>
+                            <div className="ranked-sales">
+                                {SalesRankTable(getTopSales())}
+                            </div>
+                        </tbody>
+                    </table>
                 </section>
 
                 <section className="analytics-charts">
-                    <div className="chart-panel">
-                        <h2>Top Selling Products</h2>
-                        {/* <div className="period-toggle">
-                            <button
-                                className={activePeriod === 'week' ? 'active' : ''}
-                                onClick={() => setActivePeriod('week')}
-                            >Week</button>
-                            <button
-                                className={activePeriod === 'month' ? 'active' : ''}
-                                onClick={() => setActivePeriod('month')}
-                            >Month</button>
-                            <button
-                                className={activePeriod === 'year' ? 'active' : ''}
-                                onClick={() => setActivePeriod('year')}
-                            >Year</button>
-                        </div> */}
-                        <div className="ranked-sales">
-                            {SalesRankTable(getTopSales())}
-                        </div>
-                    </div>
-
-                    <div className="chart-panel">
-                        <h2>Sales Over Time</h2>
-                        {/* line chart */}
+                    <div className="card clickable" onClick={toggleShowOrders} role="button" tabIndex={0} onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') toggleShowOrders(); }}>
+                        <h3>Completed Orders</h3>
+                        <p className="large">{(stats && stats.completedOrders) ?? 0}</p>
+                        <div className="card-hint">Click to view</div>
                     </div>
                 </section>
 
@@ -198,11 +183,11 @@ const Analysis = () => {
                                 </thead>
                                 <tbody>
                                     {orders.map(o => (
-                                        <tr key={o._id}>                                          
+                                        <tr key={o._id}>
                                             <td>{String(o._id)}</td>
-                                            <td>    
+                                            <td>
                                                 {(o.items || []).map((it, i) => (
-                                                    <div key={i}>{it.name || it.productName || `Item ${i+1}`} x{it.qty}</div>
+                                                    <div key={i}>{it.name || it.productName || `Item ${i + 1}`} x{it.qty}</div>
                                                 ))}
                                             </td>
                                             <td>₱{Number(o.total || 0).toFixed(2)}</td>

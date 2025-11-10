@@ -1,0 +1,50 @@
+.chart-container {
+  margin: "auto";
+  text-align: "center";
+  border-radius: 16px;
+}
+
+.sales-total {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.range-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.range-btn {
+  padding: 8px 16px;
+  border-radius: 30px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+  color: #333;
+}
+
+.range-btn:hover {
+  background: #f3f4f6;
+}
+
+.range-btn.active {
+  background: #2563eb;
+  color: white;
+  border-color: #2563eb;
+}
+
+.sales-chart {
+  flex: 1 1 45%;
+  padding: 16px;
+}
+
+.chart-container > .sales-chart {
+  background: #f9fafb;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
