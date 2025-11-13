@@ -3,6 +3,53 @@ import mongoose from 'mongoose';
 
 const router = express.Router();
 
+// Get sales
+router.get('/', async (req, res) => {
+  try {
+    const db = mongoose.connection.db;
+    const { status } = req.query;
+    const query = {};
+    if (status) query.status = status;
+    const orders = await db.collection('Sales')
+      .find(query)
+      .sort({ createdAt: -1 })
+      .toArray();
+    res.json(orders);
+  } catch (error) {
+    console.error('Error fetching orders:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+// 📊 Get sales summary by date range (e.g. 7d, 14d, 30d)
+router.get('/stats/:days', async (req, res) => {
+  try {
+    const db = mongoose.connection.db;
+    const days = parseInt(req.params.days);
+    const since = new Date();
+    since.setDate(since.getDate() - days);
+
+    const sales = await db.collection('Sales').aggregate([
+      { $match: { createdAt: { $gte: since } } },
+      {
+        $group: {
+          _id: {
+            $dateToString: { format: "%Y-%m-%d", date: "$createdAt" }
+          },
+          totalSales: { $sum: "$amount" }
+        }
+      },
+      { $sort: { _id: 1 } }
+    ]).toArray();
+
+    res.json(sales);
+  } catch (error) {
+    console.error('Error fetching stats:', error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
+
 // Record a sale
 router.post('/', async (req, res) => {
   try {
